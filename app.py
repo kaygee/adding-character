@@ -5,6 +5,7 @@ from flask import request
 from flask import url_for
 from flask import make_response
 import json
+from options import DEFAULTS
 
 app = Flask(__name__)
 
@@ -17,15 +18,29 @@ def get_saved_data():
     return data
 
 
+@app.route('/options')
+def options():
+    return render_template('options.html', options=DEFAULTS)
+
+
 @app.route('/')
 def index():
     data = get_saved_data()
     return render_template('index.html', saves=data)
 
 
+@app.route('/builder')
+def builder():
+    return render_template(
+        'builder.html',
+        saves=get_saved_data(),
+        options=DEFAULTS
+    )
+
+
 @app.route('/save', methods=['POST'])
 def save():
-    response = make_response(redirect(url_for('index')))
+    response = make_response(redirect(url_for('builder')))
     data = get_saved_data()
     data.update(request.form.items())
     response.set_cookie('character', json.dumps(data))
