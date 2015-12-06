@@ -3,11 +3,13 @@ from flask import render_template
 from flask import redirect
 from flask import request
 from flask import url_for
+from flask import flash
 from flask import make_response
 import json
 from options import DEFAULTS
 
 app = Flask(__name__)
+app.secret_key = "ieuwnbcierubnv9p34n98c43hpc982n89cbnp9q2h3!$#@#@$"
 
 
 def get_saved_data():
@@ -40,6 +42,7 @@ def builder():
 
 @app.route('/save', methods=['POST'])
 def save():
+    flash("Looking good!")
     response = make_response(redirect(url_for('builder')))
     data = get_saved_data()
     data.update(request.form.items())
